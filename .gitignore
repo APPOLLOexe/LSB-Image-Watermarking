@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+tempCodeRunnerFile.py
+
+venv/
+.venv/
+env/
+
+*.png
+*.jpg
+*.jpeg
+
+.DS_Store
+.vscode/
+.idea/
