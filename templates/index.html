@@ -1,0 +1,804 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Image Watermarking Application</title>
+
+    <!-- External CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =====================================================
+                         HEADER
+    ====================================================== -->
+
+    <header>
+
+        <h1>Image Watermarking</h1>
+
+        <p class="subtitle">
+            Secure your images using LSB-based digital watermarking
+        </p>
+
+    </header>
+
+
+
+    <!-- =====================================================
+                      EMBED WATERMARK
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>Embed Watermark</h2>
+
+        <p class="section-description">
+            Upload an original image and a watermark to create
+            your watermarked image.
+        </p>
+
+
+        <form id="embed-form">
+
+
+            <div class="upload-container">
+
+
+                <!-- =================================================
+                           ORIGINAL IMAGE
+                ================================================== -->
+
+                <div class="upload-box">
+
+                    <div class="icon">
+                        🖼️
+                    </div>
+
+                    <h3>
+                        Original Image
+                    </h3>
+
+                    <p>
+                        Put your original image here
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        required
+                    >
+
+
+                    <img
+                        id="preview-image"
+                        class="preview"
+                        alt="Original Image Preview"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================================
+                           WATERMARK
+                ================================================== -->
+
+                <div class="upload-box">
+
+                    <div class="icon">
+                        💧
+                    </div>
+
+                    <h3>
+                        Watermark
+                    </h3>
+
+                    <p>
+                        Put your watermark image here
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="watermark"
+                        name="watermark"
+                        accept="image/*"
+                        required
+                    >
+
+
+                    <img
+                        id="preview-watermark"
+                        class="preview"
+                        alt="Watermark Preview"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================================
+                           RESULT
+                ================================================== -->
+
+                <div class="upload-box result-box">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Watermarked Picture
+                    </h3>
+
+                    <p>
+                        Your watermarked picture will appear here
+                    </p>
+
+
+                    <img
+                        id="watermarked-img"
+                        class="preview"
+                        alt="Watermarked Image"
+                    >
+
+
+                    <!-- Download Button -->
+
+                    <a
+                        id="download-watermarked"
+                        class="download-btn"
+                        style="display: none;"
+                        download="watermarked_image.png"
+                    >
+                        Download Image
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                            EMBED BUTTON
+            ================================================== -->
+
+            <div class="button-container">
+
+                <button
+                    type="submit"
+                    id="embed-button"
+                >
+                    Embed Watermark
+                </button>
+
+            </div>
+
+
+            <div
+                id="embed-status"
+                class="status"
+            >
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =====================================================
+                     EXTRACT WATERMARK
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>Extract Watermark</h2>
+
+        <p class="section-description">
+            Upload the original image and watermarked image
+            to extract the hidden watermark.
+        </p>
+
+
+        <form id="extract-form">
+
+
+            <div class="upload-container">
+
+
+                <!-- =================================================
+                         ORIGINAL IMAGE
+                ================================================== -->
+
+                <div class="upload-box">
+
+                    <div class="icon">
+                        🖼️
+                    </div>
+
+                    <h3>
+                        Original Image
+                    </h3>
+
+                    <p>
+                        Put your original image here
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="original-extract"
+                        name="original"
+                        accept="image/*"
+                        required
+                    >
+
+
+                    <img
+                        id="preview-original-extract"
+                        class="preview"
+                        alt="Original Image Preview"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================================
+                         WATERMARKED IMAGE
+                ================================================== -->
+
+                <div class="upload-box">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Watermarked Picture
+                    </h3>
+
+                    <p>
+                        Put your watermarked picture here
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="watermarked"
+                        name="watermarked"
+                        accept="image/*"
+                        required
+                    >
+
+
+                    <img
+                        id="preview-watermarked"
+                        class="preview"
+                        alt="Watermarked Image Preview"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================================
+                         EXTRACTED WATERMARK
+                ================================================== -->
+
+                <div class="upload-box result-box">
+
+                    <div class="icon">
+                        💧
+                    </div>
+
+                    <h3>
+                        Extracted Watermark
+                    </h3>
+
+                    <p>
+                        Your extracted watermark will appear here
+                    </p>
+
+
+                    <img
+                        id="extracted-img"
+                        class="preview"
+                        alt="Extracted Watermark"
+                    >
+
+
+                    <!-- Download Button -->
+
+                    <a
+                        id="download-extracted"
+                        class="download-btn"
+                        style="display: none;"
+                        download="extracted_watermark.png"
+                    >
+                        Download Watermark
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                          EXTRACT BUTTON
+            ================================================== -->
+
+            <div class="button-container">
+
+                <button
+                    type="submit"
+                    id="extract-button"
+                >
+                    Extract Watermark
+                </button>
+
+            </div>
+
+
+            <div
+                id="extract-status"
+                class="status"
+            >
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =====================================================
+                           FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Image Watermarking Application
+        </p>
+
+        <span>
+            Built with Flask • OpenCV • LSB Steganography
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+                         JAVASCRIPT
+========================================================== -->
+
+<script>
+
+
+/* =========================================================
+                    IMAGE PREVIEW
+========================================================= */
+
+function previewImage(inputId, imageId) {
+
+    const input =
+        document.getElementById(inputId);
+
+    const image =
+        document.getElementById(imageId);
+
+
+    input.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files[0];
+
+
+            if (!file) {
+
+                image.style.display = "none";
+
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    image.src =
+                        event.target.result;
+
+                    image.style.display =
+                        "block";
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+                  PREVIEW INITIALIZATION
+========================================================= */
+
+
+/* Embed */
+
+previewImage(
+    "image",
+    "preview-image"
+);
+
+
+previewImage(
+    "watermark",
+    "preview-watermark"
+);
+
+
+/* Extract */
+
+previewImage(
+    "original-extract",
+    "preview-original-extract"
+);
+
+
+previewImage(
+    "watermarked",
+    "preview-watermarked"
+);
+
+
+
+/* =========================================================
+                       EMBED WATERMARK
+========================================================= */
+
+document
+    .getElementById("embed-form")
+    .addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const status =
+                document.getElementById(
+                    "embed-status"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "embed-button"
+                );
+
+
+            const result =
+                document.getElementById(
+                    "watermarked-img"
+                );
+
+
+            const download =
+                document.getElementById(
+                    "download-watermarked"
+                );
+
+
+            status.textContent =
+                "Embedding watermark...";
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Processing...";
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "image",
+                document
+                    .getElementById("image")
+                    .files[0]
+            );
+
+
+            formData.append(
+                "watermark",
+                document
+                    .getElementById("watermark")
+                    .files[0]
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/embed",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to embed watermark."
+                    );
+
+                }
+
+
+                const blob =
+                    await response.blob();
+
+
+                const imageURL =
+                    URL.createObjectURL(blob);
+
+
+                /* Display result */
+
+                result.src =
+                    imageURL;
+
+                result.style.display =
+                    "block";
+
+
+                /* Enable download */
+
+                download.href =
+                    imageURL;
+
+                download.style.display =
+                    "inline-block";
+
+
+                status.textContent =
+                    "✓ Watermark embedded successfully.";
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+
+                status.textContent =
+                    "✕ " + error.message;
+
+            }
+
+
+            finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Embed Watermark";
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+                    EXTRACT WATERMARK
+========================================================= */
+
+document
+    .getElementById("extract-form")
+    .addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const status =
+                document.getElementById(
+                    "extract-status"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "extract-button"
+                );
+
+
+            const result =
+                document.getElementById(
+                    "extracted-img"
+                );
+
+
+            const download =
+                document.getElementById(
+                    "download-extracted"
+                );
+
+
+            status.textContent =
+                "Extracting watermark...";
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Processing...";
+
+
+            const formData =
+                new FormData();
+
+
+            /* Original image */
+
+            formData.append(
+                "original",
+                document
+                    .getElementById(
+                        "original-extract"
+                    )
+                    .files[0]
+            );
+
+
+            /* Watermarked image */
+
+            formData.append(
+                "watermarked",
+                document
+                    .getElementById(
+                        "watermarked"
+                    )
+                    .files[0]
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/extract",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to extract watermark."
+                    );
+
+                }
+
+
+                const blob =
+                    await response.blob();
+
+
+                const imageURL =
+                    URL.createObjectURL(blob);
+
+
+                /* Display extracted watermark */
+
+                result.src =
+                    imageURL;
+
+                result.style.display =
+                    "block";
+
+
+                /* Enable download */
+
+                download.href =
+                    imageURL;
+
+                download.style.display =
+                    "inline-block";
+
+
+                status.textContent =
+                    "✓ Watermark extracted successfully.";
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+
+                status.textContent =
+                    "✕ " + error.message;
+
+            }
+
+
+            finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Extract Watermark";
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
+
